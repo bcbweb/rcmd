@@ -1,15 +1,22 @@
-import { css } from 'lit';
+import { css } from 'lit'
 
-// these styles can be imported from any component
-// for an example of how to use this, check /pages/about-about.ts
-export const styles = css`
-  @media(min-width: 1000px) {
-    sl-card {
-      max-width: 70vw;
+export const sharedStyles = css`
+  .container {
+    display: block;
+    padding: 18px;
+    padding-top: 0px;
+    margin: auto;
+  }
+  .container::part(footer) {
+    display: flex;
+    justify-content: flex-end;
+  }
+  @media (min-width: 750px) {
+    .container {
+      width: 90vw;
+    }
+    .container--sm {
+      width: 60vw;
     }
   }
-
-  main {
-    margin-top: 80px;
-  }
-`;
+`

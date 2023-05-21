@@ -15,9 +15,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
     "@shoelace-style/shoelace": "^2.4.0",
     "@thepassle/app-tools": "^0.9.0",
+    "aws-amplify": "^5.2.2",
     "lit": "^2.7.2",
+    "pwa-helper-components": "^0.2.10",
+    "pwa-helpers": "^0.9.1",
     "urlpattern-polyfill": "^7.0.0",
     "workbox-build": "^6.5.2",
     "workbox-core": "^6.5.2",
@@ -27,15 +31,5 @@
     "typescript": "^5.0.4",
     "vite": "^4.2.1",
     "vite-plugin-pwa": "^0.14.7"
-  },
-  "prettier": {
-    "tabWidth": 2,
-    "useTabs": false,
-    "semi": true,
-    "singleQuote": true,
-    "quoteProps": "consistent",
-    "trailingComma": "es5",
-    "endOfLine": "crlf",
-    "bracketSpacing": true
   }
 }
