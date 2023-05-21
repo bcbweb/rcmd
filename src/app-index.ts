@@ -10,6 +10,7 @@ import { setUser } from './utils/state.js'
 import { updateLocalStorage } from './utils/general.js'
 import './components/search-drawer.js'
 import { getSession } from './services/auth.js'
+import notify from './utils/notify.js'
 
 @customElement('app-index')
 export class AppIndex extends LitElement {
@@ -34,6 +35,7 @@ export class AppIndex extends LitElement {
     super.connectedCallback()
     this.hubAuthListener = this._handleAuthEvent.bind(this)
     this.hubAuthListenerCancelToken = Hub.listen('auth', this.hubAuthListener)
+    console.log(hubAuthListenerCancelToken)
     this._initializeState()
   }
 

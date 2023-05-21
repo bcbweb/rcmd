@@ -11,7 +11,7 @@ export class CarouselSkeleton extends LitElement {
   render() {
     return html`<div class="flex gap1">
       ${Array(this.cardsPerPage)
-        .fill()
+        .fill(null)
         .map(() => html`<card-skeleton></card-skeleton>`)}
     </div>`
   }

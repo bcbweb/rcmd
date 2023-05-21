@@ -29,6 +29,7 @@ declare interface Message {
 }
 
 declare interface ProfileBlock {
+  id?: string
   owner: string
   type: string
   created: string

@@ -1,6 +1,5 @@
 import { html, css } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { PageElement } from '../../helpers/page-element.js'
 import { flex } from '../../styles/flex.js'
 import { grid } from '../../styles/grid.js'
 import { icon } from '../../styles/icon.js'
@@ -15,9 +14,10 @@ import '../../components/rcmd-card.js'
 import store from '../../redux/store.js'
 import { addRcmd, removeRcmd } from '../../redux/profileSlice.js'
 import notify from '../../utils/notify.js'
+import { ProfileStateWrapper } from '../../helpers/profile-state-wrapper.js'
 
 @customElement('view-profile-rcmds')
-export class ViewProfileRcmds extends PageElement {
+export class ViewProfileRcmds extends ProfileStateWrapper {
   @state()
   protected loading: boolean = false
   @state()

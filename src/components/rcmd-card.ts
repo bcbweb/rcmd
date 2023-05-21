@@ -114,14 +114,14 @@ export class RcmdCard extends LitElement {
               </button>
             </li>
             <li>
-              <button
-                type="button"
-                class="button button--action ${this.deleting ? 'loading' : ''}"
-                aria-label="Delete"
+              <sl-button
+                variant="text"
+                label="Delete"
                 @click=${this._delete}
+                ?loading=${this.deleting}
               >
-                <span class="icon icon--sm">${trashIcon}</span>
-              </button>
+                <sl-icon name="trash"></sl-icon>
+              </sl-button>
             </li>
             <li>
               <a

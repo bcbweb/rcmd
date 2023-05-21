@@ -14,9 +14,9 @@ export function getBlock(id: string) {
 }
 
 /**
- * Returns a list of all links
+ * Returns a list of all blocks
  *
- * @param {string} owner Links will be returns for this owner
+ * @param {string} owner Blocks will be returns for this owner
  */
 export function getBlocks(owner: string) {
   return API.get(API_NAME, `${PATH}/list/${owner}`, {})
@@ -27,7 +27,7 @@ export function getBlocks(owner: string) {
  *
  * @param {ProfileBlock} blockObject Block object containing necessary metadata for dynamoDB
  */
-export function createBlock(blockObject: Link) {
+export function createBlock(blockObject: ProfileBlock) {
   delete blockObject.id
   return API.put(API_NAME, PATH, {
     body: camelToSnake(blockObject),
@@ -49,7 +49,7 @@ export function deleteBlock(owner: string, id: string) {
  *
  * @param {ProfileBlock} blockObject Block object containing necessary metadata for dynamoDB
  */
-export function updateBlock(blockObject: Link) {
+export function updateBlock(blockObject: ProfileBlock) {
   console.log('Update not implemented', blockObject)
   return Promise.resolve()
 }

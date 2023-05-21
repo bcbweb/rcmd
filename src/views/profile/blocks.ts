@@ -1,7 +1,5 @@
 import { html, css } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { PageElement } from '../../helpers/page-element.js'
-import { flex } from '../../styles/flex.js'
 import { icon } from '../../styles/icon.js'
 import { flex } from '../../styles/flex.js'
 import { container } from '../../styles/container.js'
@@ -41,9 +39,9 @@ export class ViewProfileBlocks extends ProfileStateWrapper {
     )
   }
 
-  firstUpdated() {
-    super.firstUpdated()
-    if (this.blocks === null) {
+  firstUpdated(changedProperties: any) {
+    super.firstUpdated(changedProperties)
+    if (this.profileBlocks === null) {
       this.loading = true
       const fetchBlocksEvent = new Event('fetch-blocks', {
         bubbles: true,
@@ -74,17 +72,16 @@ export class ViewProfileBlocks extends ProfileStateWrapper {
       )
       return
     }
-    const { url, title } = event.detail
+    const { url } = event.detail
     const now = new Date()
     const timestamp = now.toISOString()
     const block: ProfileBlock = {
       id: '',
       owner: this.email,
-      title,
+      type: 'link',
       url,
-      description: '',
+      content: '',
       created: timestamp,
-      updated: timestamp,
       visibility: 'public',
     }
     try {
@@ -125,19 +122,19 @@ export class ViewProfileBlocks extends ProfileStateWrapper {
           <p class="loading-text">Loading blocks<span id="ellipsis"></span></p>
         </section>
         <section id="blocks" ?hidden=${this.loading}>
-          <p ?hidden=${this.blocks && this.blocks.length > 0}>
+          <p ?hidden=${this.profileBlocks && this.profileBlocks.length > 0}>
             No blocks have been added.
           </p>
           <ul
             class="tag-list"
-            ?hidden=${!this.blocks || this.blocks.length === 0}
+            ?hidden=${!this.profileBlocks || this.profileBlocks.length === 0}
           >
-            ${(this.blocks || []).map(
+            ${(this.profileBlocks || []).map(
               (block, index) =>
                 html`<li>
                   <div class="flex aic">
                     <a href="http://${block.url}" target="blank">
-                      ${block.title}
+                      ${block.content}
                     </a>
                     <sl-button
                       variant="text"

@@ -11,22 +11,22 @@ export class CardGrid extends LitElement {
   title = ''
 
   @query('#items')
-  items: HTMLUListElement
+  items!: HTMLUListElement
 
   connectedCallback() {
     super.connectedCallback()
   }
 
   get cardCount(): number {
-    const slots = this.items?.querySelector('slot')
-    if (!slots) return 0
-    return slots[0]?.assignedNodes().length
+    const slot = this.items?.querySelector('slot')
+    if (!slot) return 0
+    return slot?.assignedNodes().length
   }
 
   get gridClass(): string {
-    if (this.cardCount == 1 || this.cardCount.length == 2) {
+    if (this.cardCount == 1 || this.cardCount == 2) {
       return 'grid--1-2'
-    } else if (this.cardCount.length == 3) {
+    } else if (this.cardCount == 3) {
       return 'grid--3'
     } else {
       return 'grid--4-plus'

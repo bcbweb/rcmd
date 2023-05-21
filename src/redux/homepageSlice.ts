@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { snakeToCamel } from '../utils/general.js'
 
 type HomepageState = {
   users: User[] | null

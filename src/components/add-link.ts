@@ -5,7 +5,7 @@ import { form } from '../styles/form.js'
 import { flex } from '../styles/flex.js'
 import { icon } from '../styles/icon.js'
 import { spacing } from '../styles/spacing.js'
-
+import notify from '../utils/notify.js'
 @customElement('add-link')
 export class AddLink extends LitElement {
   @property({ type: Boolean }) isFormVisible = false

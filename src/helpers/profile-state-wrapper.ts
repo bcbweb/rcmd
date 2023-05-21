@@ -1,15 +1,9 @@
-import { LitElement } from 'lit'
-import type { PropertyValues } from 'lit'
 import { property } from 'lit/decorators.js'
 import { connect } from 'pwa-helpers'
-import config from '../config.js'
-import { updateMeta } from './html-meta-manager/index.js'
-import type { MetaOptions } from './html-meta-manager/index.js'
 import { PageElement } from './page-element.js'
 import notify from '../utils/notify'
 import { getLinks } from '../services/link.js'
-import { getRcmds } from '../services/rcmd.js'
-import { setLinks, setRcmds, setActiveRole } from '../redux/profileSlice.js'
+import { setLinks } from '../redux/profileSlice.js'
 import store, { RootState } from '../redux/store.js'
 
 export class ProfileStateWrapper extends connect(store)(PageElement) {

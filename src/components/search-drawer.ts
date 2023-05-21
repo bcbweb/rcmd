@@ -4,7 +4,7 @@ import { customElement, query } from 'lit/decorators.js'
 @customElement('search-drawer')
 export class SearchDrawer extends LitElement {
   @query('sl-drawer')
-  private drawer!: HTMLSlDrawerElement
+  private drawer!: any
 
   constructor() {
     super()

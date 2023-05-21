@@ -1,5 +1,6 @@
-import { LitElement, html, css } from 'lit'
+import { html, css } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
+import { ifDefined } from 'lit/directives/if-defined.js'
 import { signOut } from '../services/auth.js'
 import { router } from '../router.js'
 import { ProfileStateWrapper } from '../helpers/profile-state-wrapper.js'
@@ -23,26 +24,30 @@ export class AccountMenu extends ProfileStateWrapper {
 
   constructor() {
     super()
-    this.handleStorageChange = this.handleStorageChange.bind(this)
+    this._handleStorageChange = this._handleStorageChange.bind(this)
   }
 
   connectedCallback() {
     super.connectedCallback()
     this.token = localStorage.getItem('token')
-    window.addEventListener('storage', this.handleStorageChange)
+    window.addEventListener('storage', this._handleStorageChange)
   }
 
   disconnectedCallback() {
-    window.removeEventListener('storage', this.handleStorageChange)
+    window.removeEventListener('storage', this._handleStorageChange)
     super.disconnectedCallback()
   }
 
-  handleStorageChange(event: StorageEvent) {
+  private _handleStorageChange(event: StorageEvent) {
     if (event.key === 'token') {
       this.token = event.newValue
       this.requestUpdate()
     }
   }
+
+  private _handleAddProfileClick() {}
+
+  private _handleSwitchProfileClick() {}
 
   private _signOut() {
     signOut()
@@ -63,7 +68,9 @@ export class AccountMenu extends ProfileStateWrapper {
     const profileMenu = html`
       <sl-button-group label="profile menu">
         <sl-button href="/profile" pill style="width: 40px">
-          <sl-avatar initials="BB" image=${this.profilePicture}></sl-avatar>
+          <sl-avatar initials="BB" image=${ifDefined(
+            this.profilePicture === null ? undefined : this.profilePicture
+          )}></sl-avatar>
         </sl-button>
         <sl-dropdown placement="bottom-end">
           <sl-button slot="trigger" caret pill>

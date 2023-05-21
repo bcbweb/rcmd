@@ -10,13 +10,13 @@ import { updateLocalStorage } from '../utils/general.js'
 export async function signUp(userObject: User) {
   try {
     // Create cognito user
-    const { user } = await Auth.signUp({
+    const { user } = (await Auth.signUp({
       username: userObject.username,
       password: userObject.password,
       autoSignIn: {
         enabled: true,
       },
-    })
+    })) as any // AWS Amplify types are incorrect
     updateLocalStorage('token', user.signInUserSession.idToken.jwtToken)
     console.log('Created user in cognito', user)
     return user

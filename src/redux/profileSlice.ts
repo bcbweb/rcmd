@@ -18,6 +18,21 @@ const profileSlice = createSlice({
   name: 'profile',
   initialState,
   reducers: {
+    setBlocks(state: ProfileState, action: PayloadAction<ProfileBlock[]>) {
+      if (!action.payload) return
+      state.blocks = action.payload
+    },
+    addBlock(state: ProfileState, action: PayloadAction<ProfileBlock>) {
+      if (!action.payload) return
+      state.blocks?.push(action.payload)
+    },
+    removeBlock(state: ProfileState, action: PayloadAction<string>) {
+      if (!action.payload) return
+      const newBlocks = state.blocks?.filter(
+        (block) => block.id !== action.payload
+      ) as ProfileBlock[]
+      state.blocks = newBlocks
+    },
     setLinks(state: ProfileState, action: PayloadAction<Link[]>) {
       if (!action.payload) return
       state.links = action.payload
