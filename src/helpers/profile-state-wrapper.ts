@@ -5,6 +5,8 @@ import notify from '../utils/notify'
 import { getLinks } from '../services/link.js'
 import { setLinks } from '../redux/profileSlice.js'
 import store, { RootState } from '../redux/store.js'
+import { isLoggedIn } from '../utils/general.js'
+import { router } from '../router.js'
 
 export class ProfileStateWrapper extends connect(store)(PageElement) {
   @property() email: string | null = null
@@ -29,11 +31,19 @@ export class ProfileStateWrapper extends connect(store)(PageElement) {
   constructor() {
     super()
     this._handleFetchLinks = this._handleFetchLinks.bind(this)
+    this._handleSetUserComplete = this._handleSetUserComplete.bind(this)
   }
 
   connectedCallback() {
     super.connectedCallback()
     this.addEventListener('fetch-links', this._handleFetchLinks)
+    document.addEventListener('set-user-complete', this._handleSetUserComplete)
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback()
+    this.removeEventListener('fetch-links', this._handleFetchLinks)
+    this.removeEventListener('set-user-complete', this._handleSetUserComplete)
   }
 
   stateChanged(state: RootState) {
@@ -57,15 +67,19 @@ export class ProfileStateWrapper extends connect(store)(PageElement) {
     this.activeRole = state.profile.activeRole
   }
 
+  private _handleSetUserComplete() {
+    if (isLoggedIn() && !this.onboardingComplete) {
+      notify('Please complete your profile to continue.', 'info')
+      router.navigate('/onboarding')
+    }
+  }
+
   private async _handleFetchLinks() {
-    console.log('fetching links', this.email)
     if (!this.email) {
-      console.log('Error fetching links')
       notify('Error fetching links', 'warning', 'exclamation-triangle')
       return
     }
     const links = await getLinks(this.email)
-    console.log(links)
     store.dispatch(setLinks(links.data.Items))
     const fetchLinksEvent = new Event('fetch-links-complete', {
       bubbles: true,

@@ -29,6 +29,7 @@ export class AvatarComponent extends LitElement {
     sizing,
     css`
       :host {
+        display: block;
         position: relative;
         width: var(--size);
         height: var(--size);

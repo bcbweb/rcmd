@@ -22,4 +22,10 @@ export const flex = css`
   .fdc {
     flex-direction: column;
   }
+  .asfs {
+    align-self: flex-start;
+  }
+  .asfe {
+    align-self: flex-end;
+  }
 `

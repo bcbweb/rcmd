@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit'
+import { ifDefined } from 'lit/directives/if-defined.js'
 import { customElement, property } from 'lit/decorators.js'
 import { skeleton } from '../styles/skeleton.js'
 
@@ -15,11 +16,12 @@ export class CoverPicture extends LitElement {
     return html`
       <sl-skeleton effect="pulse" class="skeleton--image"></sl-skeleton>
       <img
-        src=${this.image}
+        src=${ifDefined(this.image === null ? undefined : this.image)}
         width="100%"
         height="100%"
         ?hidden=${!this.image}
       />
+      <slot></slot>
     `
   }
 
@@ -29,8 +31,9 @@ export class CoverPicture extends LitElement {
       :host {
         aspect-ratio: 4/1;
         position: relative;
+        display: flex;
       }
-      sl-skeleton {
+      sl-skeleton.skeleton--image {
         aspect-ratio: 4/1;
         position: absolute;
         top: 0;

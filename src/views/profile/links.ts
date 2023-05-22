@@ -1,9 +1,9 @@
 import { html, css } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { PageElement } from '../../helpers/page-element.js'
+import { lists } from '../../styles/lists.js'
 import { flex } from '../../styles/flex.js'
-import { icon } from '../../styles/icon.js'
-import { flex } from '../../styles/flex.js'
+import { sizing } from '../../styles/sizing.js'
+import { spacing } from '../../styles/spacing.js'
 import { container } from '../../styles/container.js'
 import { animations } from '../../styles/animations.js'
 import { createLink, deleteLink } from '../../services/link.js'
@@ -66,7 +66,6 @@ export class ViewProfileLinks extends ProfileStateWrapper {
   }
 
   private async _handleLinkSubmitted(event: CustomEvent) {
-    console.log('link submitted received')
     if (!this.email) {
       notify(
         'There was an error adding the link',
@@ -119,27 +118,30 @@ export class ViewProfileLinks extends ProfileStateWrapper {
         <p>Curate your favourite links to show on your profile</p>
       </header>
       <div class="container">
-        <div class="add-link-form">
-          <add-link @link-submitted=${this._handleLinkSubmitted}></add-link>
-        </div>
+        <add-link @link-submitted=${this._handleLinkSubmitted}></add-link>
         <section ?hidden=${!this.loading}>
           <p class="loading-text">Loading links<span id="ellipsis"></span></p>
         </section>
-        <section id="links" ?hidden=${this.loading}>
+        <section id="links" class="mt1" ?hidden=${this.loading}>
           <p ?hidden=${this.links && this.links.length > 0}>
             No links have been added.
           </p>
           <ul
-            class="tag-list"
+            id="links-list"
+            class="unstyled flex fdc"
             ?hidden=${!this.links || this.links.length === 0}
           >
             ${(this.links || []).map(
               (link, index) =>
                 html`<li>
                   <div class="flex aic">
-                    <a href="http://${link.url}" target="blank">
+                    <sl-button
+                      href="http://${link.url}"
+                      target="_blank"
+                      class="w100"
+                    >
                       ${link.title}
-                    </a>
+                    </sl-button>
                     <sl-button
                       variant="text"
                       class="delete-button"
@@ -160,13 +162,18 @@ export class ViewProfileLinks extends ProfileStateWrapper {
 
   static styles = [
     flex,
-    icon,
+    lists,
     container,
     animations,
+    sizing,
+    spacing,
     css`
       h1 {
         margin: 0;
         text-align: center;
+      }
+      #links-list {
+        gap: 10px;
       }
       #ellipsis::after {
         animation: ellipsis-animation 1s infinite;

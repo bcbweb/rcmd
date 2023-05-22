@@ -9,6 +9,7 @@ interface AutocompleteItem {
 
 @customElement('autocomplete-component')
 export class AutocompleteComponent extends LitElement {
+  @property({ type: String }) label: string | null = null
   @property({ type: Array }) items: AutocompleteItem[] = []
   @property({ type: String }) value: string = ''
   @property({ type: Boolean }) open: boolean = false
@@ -82,11 +83,12 @@ export class AutocompleteComponent extends LitElement {
 
   render() {
     return html`
-      <input
+      <sl-input
+        label=${this.label}
         type="text"
         @input=${this._handleInputChange}
         .value=${this.value}
-      />
+      ></sl-input>
       ${this.open
         ? html`
             <ul>

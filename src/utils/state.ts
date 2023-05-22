@@ -27,6 +27,8 @@ export async function setUser(user?: UserMeta) {
   const session = await getSession()
   if (!session) {
     console.error('Error retrieving user session')
+    const event = new CustomEvent('remove-local-storage-token')
+    document.dispatchEvent(event)
     return
   }
   let userMeta = user || (await getUserMeta(session.idToken.payload.email))
@@ -46,5 +48,11 @@ export async function setUser(user?: UserMeta) {
   store.dispatch(setProfileBlocks(Object.values(userMeta.profile_blocks || {})))
   store.dispatch(setOnboardingComplete(userMeta.onboarding_complete))
   console.log(store.getState())
+  document.dispatchEvent(
+    new CustomEvent('set-local-storage-token', {
+      detail: session.getIdToken().getJwtToken(),
+    })
+  )
+  document.dispatchEvent(new CustomEvent('set-user-complete'))
   return Promise.resolve()
 }

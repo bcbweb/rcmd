@@ -9,7 +9,6 @@ import { Hub } from 'aws-amplify'
 import { setUser } from './utils/state.js'
 import { updateLocalStorage } from './utils/general.js'
 import './components/search-drawer.js'
-import { getSession } from './services/auth.js'
 import notify from './utils/notify.js'
 
 @customElement('app-index')
@@ -33,10 +32,35 @@ export class AppIndex extends LitElement {
 
   connectedCallback() {
     super.connectedCallback()
+    console.log((import.meta as any).env)
     this.hubAuthListener = this._handleAuthEvent.bind(this)
     this.hubAuthListenerCancelToken = Hub.listen('auth', this.hubAuthListener)
-    console.log(hubAuthListenerCancelToken)
-    this._initializeState()
+    document.addEventListener(
+      'set-local-storage-token',
+      this._handleSetLocalStorageToken
+    )
+    document.addEventListener(
+      'remove-local-storage-token',
+      this._handleRemoveLocalStorageToken
+    )
+    document.addEventListener(
+      'user-onboarding-complete',
+      this._handleOnboardingComplete
+    )
+    setUser()
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.hubAuthListenerCancelToken()
+    document.removeEventListener(
+      'set-local-storage-token',
+      this._handleSetLocalStorageToken
+    )
+    document.removeEventListener(
+      'remove-local-storage-token',
+      this._handleRemoveLocalStorageToken
+    )
   }
 
   firstUpdated() {
@@ -52,18 +76,22 @@ export class AppIndex extends LitElement {
     })
   }
 
-  private async _initializeState() {
-    const session = await getSession()
-    if (session) {
-      setUser()
-      updateLocalStorage('token', session.idToken.jwtToken)
-    } else {
-      updateLocalStorage('token', null)
-    }
+  private _handleSetLocalStorageToken(event: any) {
+    updateLocalStorage('token', event.detail)
+  }
+
+  private _handleRemoveLocalStorageToken() {
+    updateLocalStorage('token', null)
+  }
+
+  private _handleOnboardingComplete() {
+    setUser()
+    notify('Onboarding complete! Welcome to RCMD', 'success', 'check-circle')
+    router.navigate('/profile')
   }
 
   private _loginFailureCallback() {
-    notify('Login failed.', 'error', 'exclamation-triangle')
+    notify('Automatic login failed.', 'danger', 'exclamation-triangle')
     router.navigate('/login')
   }
 
@@ -80,9 +108,11 @@ export class AppIndex extends LitElement {
         setUser()
         break
       case 'autoSignIn_failure':
+        console.log(payload)
         this._loginFailureCallback()
         break
       case 'signOut':
+        updateLocalStorage('token', null)
         router.navigate('/')
         break
       default:

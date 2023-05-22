@@ -11,7 +11,7 @@ import externalLinkIcon from '../icons/external-link.js'
 import shareIcon from '../icons/share.js'
 import './share-modal.js'
 
-const RCMD_SSR_URL = (import.meta as any).env.RCMD_SSR_URL
+const VITE_RCMD_SSR_URL = (import.meta as any).env.VITE_RCMD_SSR_URL
 
 @customElement('rcmd-card')
 export class RcmdCard extends LitElement {
@@ -45,7 +45,7 @@ export class RcmdCard extends LitElement {
   }
 
   get computedLink(): string {
-    return `${RCMD_SSR_URL}/${this.rcmd.id}`
+    return `${VITE_RCMD_SSR_URL}/${this.rcmd.id}`
   }
 
   get computedExternalLink(): string {

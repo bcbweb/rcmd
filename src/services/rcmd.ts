@@ -1,8 +1,8 @@
 import { API, Storage } from 'aws-amplify'
 import { camelToSnake } from '../utils/general.js'
 
-const CLOUDFRONT_URL_USER_IMAGES = (import.meta as any).env
-  .CLOUDFRONT_URL_USER_IMAGES
+const VITE_CLOUDFRONT_URL_USER_IMAGES = (import.meta as any).env
+  .VITE_CLOUDFRONT_URL_USER_IMAGES
 const API_NAME = 'rcmdApi'
 const PATH = '/rcmd'
 
@@ -71,7 +71,7 @@ export async function uploadPicture(file: File | undefined) {
       acl: 'public-read',
     })
     console.log('RCMD picture uploaded successfully')
-    return `${CLOUDFRONT_URL_USER_IMAGES}/public/${result.key}`
+    return `${VITE_CLOUDFRONT_URL_USER_IMAGES}/public/${result.key}`
   } catch (error) {
     console.log(`Error uploading RCMD picture: ${error}`)
     throw error

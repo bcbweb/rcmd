@@ -21,10 +21,12 @@ export class PageExplore extends PageElement {
           <h1>Explore</h1>
         </div>
 
-        <sl-button size="large" @click=${() => openSearchDrawer()}>
-          <sl-icon name="search" slot="prefix"></sl-icon>
-          Search
-        </sl-button>
+        <sl-tooltip content="Coming soon!" placement="bottom">
+          <sl-button size="large" @click=${() => openSearchDrawer()}>
+            <sl-icon name="search" slot="prefix"></sl-icon>
+            Search
+          </sl-button>
+        </sl-tooltip>
 
         <sl-tab-group placement="start">
           <sl-tab slot="nav" panel="people">People</sl-tab>

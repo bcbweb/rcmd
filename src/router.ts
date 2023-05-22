@@ -60,6 +60,19 @@ export const router = new Router({
       render: () => html`<page-register></page-register>`,
     },
     {
+      path: `${baseURL}confirm`,
+      title: 'Confirm',
+      plugins: [lazy(() => import('./pages/confirm/index.js'))],
+      render: (context: any) =>
+        html`<page-confirm username=${context.query.username}></page-confirm>`,
+    },
+    {
+      path: `${baseURL}onboarding`,
+      title: 'Onboarding',
+      plugins: [lazy(() => import('./pages/onboarding/index.js'))],
+      render: () => html`<page-onboarding></page-onboarding>`,
+    },
+    {
       path: `${baseURL}profile`,
       title: 'Profile - Manage blocks',
       plugins: [
@@ -128,12 +141,12 @@ export const router = new Router({
       `,
     },
     {
-      path: `${baseURL}profile/info`,
-      title: 'Add profile',
+      path: `${baseURL}account`,
+      title: 'Edit your info',
       plugins: [
         lazy(() => {
-          import('./layouts/profile.js')
-          import('./views/profile/info.js')
+          import('./layouts/settings.js')
+          import('./views/settings/account.js')
         }),
         {
           shouldNavigate: () => ({
@@ -143,15 +156,19 @@ export const router = new Router({
         },
       ],
       redirect: '/login',
-      render: () => html`Update info`,
+      render: () => html`
+        <layout-settings page="account">
+          <view-settings-account></view-settings-account>
+        </layout-settings>
+      `,
     },
     {
       path: `${baseURL}settings`,
       title: 'Settings',
       plugins: [
         lazy(() => {
-          // import('./layouts/profile.js')
-          // import('./views/profile/rcmds.js')
+          import('./layouts/settings.js')
+          import('./views/settings/main.js')
         }),
         {
           shouldNavigate: () => ({
@@ -161,7 +178,11 @@ export const router = new Router({
         },
       ],
       redirect: '/login',
-      render: () => html`Settings`,
+      render: () => html`
+        <layout-settings page="settings">
+          <view-settings-main></view-settings-main>
+        </layout-settings>
+      `,
     },
   ],
 })

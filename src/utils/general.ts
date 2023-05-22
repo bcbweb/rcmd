@@ -1,3 +1,5 @@
+import { getCognitoUser } from '../services/auth'
+
 /**
  * Determines if a user is logged in.
  * TODO: improve approach to eliminate reduntant token in localstorage?
@@ -6,6 +8,11 @@
  */
 export function isLoggedIn(): boolean {
   return localStorage.getItem('token') !== null
+}
+
+export async function isUserConfirmed() {
+  const user: any = await getCognitoUser()
+  return user && user.attributes?.email_verified
 }
 
 /**
@@ -141,7 +148,7 @@ export function shareLink(
   media?: string,
   description: string = 'Check out this link!'
 ) {
-  const APP_ID = process.env.FACEBOOK_APP_ID
+  const APP_ID = process.env.VITE_FACEBOOK_APP_ID
   const url = encodeURIComponent(link)
   let shareUrl
 
@@ -200,4 +207,15 @@ export function openSearchDrawer() {
     composed: true,
   })
   document.dispatchEvent(event)
+}
+
+/**
+ * Capitalizes the first letter of a string
+ * @param {string} string The string to capitalize
+ * @returns {string} The capitalized string
+ * @example
+ * capitalize('hello world') // 'Hello world'
+ */
+export function capitalize(string: string): string {
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }

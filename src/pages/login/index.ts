@@ -5,6 +5,7 @@ import notify from '../../utils/notify.js'
 import { sharedStyles } from '../../styles/shared-styles.js'
 import { serialize } from '@shoelace-style/shoelace/dist/utilities/form.js'
 import { PageElement } from '../../helpers/page-element.js'
+import { router } from '../../router.js'
 
 @customElement('page-login')
 export class PageLogin extends PageElement {
@@ -32,6 +33,12 @@ export class PageLogin extends PageElement {
           break
         case 'NotAuthorizedException':
           notify('Invalid username or password.', 'warning')
+          break
+        case 'UserNotConfirmedException':
+          notify('Please confirm your email address to continue.', 'info')
+          router.navigate(
+            `/confirm?username=${encodeURIComponent(data.username as string)}`
+          )
           break
         default:
           notify('Unable to log in. Please contact support.', 'danger')
@@ -70,7 +77,6 @@ export class PageLogin extends PageElement {
             name="password"
             label="Password"
             type="password"
-            placeholder="Password"
             password-toggle
           ></sl-input>
           <sl-button type="submit" variant="primary" ?loading=${this.loading}>

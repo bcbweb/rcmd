@@ -1,8 +1,6 @@
 import { API, Storage } from 'aws-amplify'
 import { camelToSnake, slugify } from '../utils/general.js'
 
-const CLOUDFRONT_URL_USER_IMAGES = (import.meta as any).env
-  .CLOUDFRONT_URL_USER_IMAGES
 const API_NAME = 'userApi'
 const PATH = '/user'
 
@@ -65,7 +63,9 @@ export async function uploadUserPicture(file: File | undefined) {
       acl: 'public-read',
     })
     console.log('User picture uploaded successfully')
-    return `${CLOUDFRONT_URL_USER_IMAGES}/public/${result.key}`
+    return `${
+      (import.meta as any).env.VITE_CLOUDFRONT_URL_USER_IMAGES
+    }/public/${result.key}`
   } catch (error) {
     console.log(`Error uploading user picture: ${error}`)
     throw error

@@ -1,20 +1,20 @@
 import { LitElement, html, css } from 'lit'
 import { customElement, property, state, query } from 'lit/decorators.js'
-import { button } from '../styles/button.js'
 import { form } from '../styles/form.js'
 import { flex } from '../styles/flex.js'
-import { icon } from '../styles/icon.js'
 import { spacing } from '../styles/spacing.js'
+import { sizing } from '../styles/sizing.js'
 import notify from '../utils/notify.js'
+import { serialize } from '@shoelace-style/shoelace/dist/utilities/form.js'
+
 @customElement('add-link')
 export class AddLink extends LitElement {
-  @property({ type: Boolean }) isFormVisible = false
-
   @state()
   protected loading: boolean = false
-
   @query('form')
   private form!: HTMLFormElement
+  @query('sl-dialog')
+  private dialog!: any
 
   private titleInputElement!: HTMLInputElement
   private linkInputElement!: HTMLInputElement
@@ -35,16 +35,12 @@ export class AddLink extends LitElement {
   }
 
   private _closeForm() {
-    this.isFormVisible = false
+    this.dialog.hide()
     this.loading = false
   }
 
   private _handleAddClick() {
-    this.isFormVisible = true
-  }
-
-  private _handleCloseClick() {
-    this._closeForm()
+    this.dialog.show()
   }
 
   private _handleSubmit(event: Event) {
@@ -55,35 +51,21 @@ export class AddLink extends LitElement {
       notify('Please fill out all fields.', 'neutral', 'info-circle')
       return
     }
+    const data = serialize(event.target as HTMLFormElement)
     this.loading = true
-    const link = {
-      title: this.titleInputElement.value,
-      url: this.linkInputElement.value,
-    }
     this.dispatchEvent(
-      new CustomEvent('link-submitted', { detail: link, bubbles: true })
+      new CustomEvent('link-submitted', { detail: data, bubbles: true })
     )
   }
 
   static styles = [
-    button,
-    icon,
+    sizing,
     spacing,
     form,
     flex,
     css`
       form {
         position: relative;
-      }
-      .close-button {
-        background-color: transparent;
-        cursor: pointer;
-        border: none;
-        width: 30px;
-        height: 30px;
-      }
-      button[type='submit'] {
-        width: 100px;
       }
     `,
   ]
@@ -93,54 +75,44 @@ export class AddLink extends LitElement {
       <sl-button
         variant="primary"
         @click=${this._handleAddClick}
-        ?hidden=${this.isFormVisible}
+        pill
+        class="w100"
       >
         Add link
         <sl-icon name="plus" slot="suffix"></sl-icon>
       </sl-button>
-      <form
-        @submit=${this._handleSubmit}
-        method="post"
-        style="margin-top: 1em; display: ${this.isFormVisible
-          ? 'block'
-          : 'none'}"
-        @keydown=${(e: KeyboardEvent) =>
-          e.keyCode === 13 && this._handleSubmit(e)}
-      >
-        <sl-icon-button
-          name="x"
-          label="close"
-          @click=${this._handleCloseClick}
-        ></sl-icon-button>
-        <input
-          type="text"
-          name="title"
-          required
-          placeholder="Title"
-          @input=${(e: InputEvent) =>
-            (this.titleInputElement = e.target as HTMLInputElement)}
-        />
-        <div class="flex mt1 gap1">
-          <input
-            type="text"
-            name="link"
+      <sl-dialog label="Add link">
+        <form
+          @submit=${this._handleSubmit}
+          method="post"
+          style="margin-top: 1em;"
+        >
+          <sl-input
+            name="title"
             required
-            pattern="(http[s]?://)?.+"
-            placeholder="URL"
-            @input=${(e: InputEvent) =>
-              (this.linkInputElement = e.target as HTMLInputElement)}
-          />
-          <sl-button
-            type="submit"
-            variant="primary"
-            name="plus"
-            label="add link"
-            ?loading=${this.loading}
-          >
-            Add
-          </sl-button>
-        </div>
-      </form>
+            placeholder="Title"
+            help-text="Enter a descriptive title for your link."
+          ></sl-input>
+          <div class="flex mt1 gap1">
+            <sl-input
+              type="text"
+              name="link"
+              required
+              pattern="(http[s]?://)?.+"
+              placeholder="URL"
+            ></sl-input>
+            <sl-button
+              type="submit"
+              variant="primary"
+              name="plus"
+              label="add link"
+              ?loading=${this.loading}
+            >
+              Add
+            </sl-button>
+          </div>
+        </form>
+      </sl-dialog>
     `
   }
 }
