@@ -31,4 +31,34 @@ export const spacing = css`
   .px1 {
     padding: 1rem;
   }
+  .mt2 {
+    margin-top: 2rem;
+  }
+  .mr2 {
+    margin-right: 2rem;
+  }
+  .mb2 {
+    margin-bottom: 2rem;
+  }
+  .ml2 {
+    margin-left: 2rem;
+  }
+  .mx2 {
+    margin: 2rem;
+  }
+  .pt2 {
+    padding-top: 2rem;
+  }
+  .pr2 {
+    padding-right: 2rem;
+  }
+  .pb2 {
+    padding-bottom: 2rem;
+  }
+  .pl2 {
+    padding-left: 2rem;
+  }
+  .px2 {
+    padding: 2rem;
+  }
 `

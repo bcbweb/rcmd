@@ -8,7 +8,7 @@ import '../../components/card-skeleton.js'
 import { PageElement } from '../../helpers/page-element.js'
 import { getUsers } from '../../services/user.js'
 import { snakeToCamel } from '../../utils/general.js'
-import store, { RootState } from '../../redux/store.js'
+import store from '../../redux/store.js'
 import { setUsers } from '../../redux/homepageSlice.js'
 
 @customElement('page-home')
@@ -54,7 +54,7 @@ export class PageHome extends PageElement {
   // TODO Fix carousel skeleton loading
   render() {
     const carouselSkeleton = Array(this.cardsPerPage * 2)
-      .fill()
+      .fill(null)
       .map(
         () =>
           html`

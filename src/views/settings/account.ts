@@ -1,5 +1,5 @@
 import { html, css } from 'lit'
-import { customElement, query, state } from 'lit/decorators.js'
+import { customElement, state } from 'lit/decorators.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
 import {
   uploadUserPicture,
@@ -273,6 +273,7 @@ export class ViewSettingsAccount extends ProfileStateWrapper {
               class="asfe"
               name="urlHandle"
             ></sl-input>
+            <sl-button @click=${this._generateURLHandle}>Suggest</sl-button>
           </div>
           <div class="flex gap05 w100">
             <sl-input

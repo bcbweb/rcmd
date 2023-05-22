@@ -16,13 +16,14 @@ import { ProfileStateWrapper } from '../../helpers/profile-state-wrapper.js'
 @customElement('view-profile-links')
 export class ViewProfileLinks extends ProfileStateWrapper {
   @state()
-  protected loading: boolean = false
+  protected loading: boolean = true
   @state()
   protected deleting: number | false = false
 
   constructor() {
     super()
     this._handleFetchLinksComplete = this._handleFetchLinksComplete.bind(this)
+    this._handleSetUserComplete = this._handleSetUserComplete.bind(this)
   }
 
   connectedCallback() {
@@ -31,6 +32,7 @@ export class ViewProfileLinks extends ProfileStateWrapper {
       'fetch-links-complete',
       this._handleFetchLinksComplete
     )
+    document.addEventListener('set-user-complete', this._handleSetUserComplete)
   }
 
   disconnectedCallback() {
@@ -39,18 +41,14 @@ export class ViewProfileLinks extends ProfileStateWrapper {
       'fetch-links-complete',
       this._handleFetchLinksComplete
     )
+    this.removeEventListener('set-user-complete', this._handleSetUserComplete)
   }
 
-  firstUpdated() {
-    super.firstUpdated()
-    if (this.links === null) {
-      this.loading = true
-      const fetchLinksEvent = new Event('fetch-links', {
-        bubbles: true,
-        composed: true,
-      })
-      this.dispatchEvent(fetchLinksEvent)
-    }
+  protected _handleSetUserComplete() {
+    this.loading = true
+    this.dispatchEvent(
+      new Event('fetch-links', { bubbles: true, composed: true })
+    )
   }
 
   private async _handleFetchLinksComplete() {
@@ -122,7 +120,7 @@ export class ViewProfileLinks extends ProfileStateWrapper {
         <section ?hidden=${!this.loading}>
           <p class="loading-text">Loading links<span id="ellipsis"></span></p>
         </section>
-        <section id="links" class="mt1" ?hidden=${this.loading}>
+        <section id="links" class="mt2 mb2" ?hidden=${this.loading}>
           <p ?hidden=${this.links && this.links.length > 0}>
             No links have been added.
           </p>

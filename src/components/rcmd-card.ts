@@ -5,7 +5,6 @@ import { flex } from '../styles/flex.js'
 import { icon } from '../styles/icon.js'
 import { lists } from '../styles/lists.js'
 import { deleteRcmd } from '../services/rcmd.js'
-import { formatTimestamp } from '../utils/general.js'
 import editIcon from '../icons/edit.js'
 import externalLinkIcon from '../icons/external-link.js'
 import shareIcon from '../icons/share.js'
@@ -54,10 +53,6 @@ export class RcmdCard extends LitElement {
       .replace('http://', '')}`
   }
 
-  get formattedDate(): string {
-    return formatTimestamp(this.rcmd.created)
-  }
-
   private async _delete() {
     if (!this.rcmd || !this.rcmd.id) return
     this.deleting = true
@@ -96,11 +91,7 @@ export class RcmdCard extends LitElement {
         description=${this.rcmd.description}
         ?is-open=${this.showingShareModal}
       ></share-modal>
-      <div
-        id="rcmd-card"
-        class="flex fdc gap1"
-        ?hidden=${this.rcmd.visibility === 'private'}
-      >
+      <sl-card id="rcmd-card" ?hidden=${this.rcmd.visibility === 'private'}>
         <div id="actions">
           <ul class="unstyled flex">
             <li>
@@ -144,9 +135,15 @@ export class RcmdCard extends LitElement {
             </li>
           </ul>
         </div>
+        <img src=${this.rcmd.image} alt=${this.rcmd.title} slot="header" />
         <h1>${this.rcmd.title}</h1>
-        <time>${this.formattedDate}</time>
-        <img src=${this.rcmd.image} alt=${this.rcmd.title} />
+        <sl-format-date
+          month="long"
+          day="numeric"
+          year="numeric"
+          date=${this.rcmd.created}
+        ></sl-format-date
+        ><br />
         <p>${this.rcmd.description}</p>
         <span>${this.rcmd.locationType}</span>
         <p>${this.rcmd.address}</p>
@@ -160,7 +157,7 @@ export class RcmdCard extends LitElement {
         <sl-button variant="text" href="/rcmd/${this.rcmd.id}">
           View more
         </sl-button>
-      </div>
+      </sl-card>
     `
   }
 
@@ -176,20 +173,6 @@ export class RcmdCard extends LitElement {
       }
       h1 {
         margin: 0;
-      }
-      #rcmd-card {
-        width: 100%;
-        border: var(--border, none);
-      }
-      #rcmd-card img {
-        object-position: center center;
-        object-fit: cover;
-        width: 100%;
-      }
-      #actions {
-        position: absolute;
-        top: 0;
-        right: 0;
       }
     `,
   ]

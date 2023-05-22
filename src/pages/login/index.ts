@@ -1,4 +1,4 @@
-import { html, css, LitElement } from 'lit'
+import { html, css } from 'lit'
 import { customElement, query, state } from 'lit/decorators.js'
 import { signIn } from '../../services/auth.js'
 import notify from '../../utils/notify.js'

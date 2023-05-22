@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit'
-import { customElement, property, state, query } from 'lit/decorators.js'
+import { customElement, state, query } from 'lit/decorators.js'
 import { form } from '../styles/form.js'
 import { flex } from '../styles/flex.js'
 import { spacing } from '../styles/spacing.js'
@@ -15,9 +15,6 @@ export class AddLink extends LitElement {
   private form!: HTMLFormElement
   @query('sl-dialog')
   private dialog!: any
-
-  private titleInputElement!: HTMLInputElement
-  private linkInputElement!: HTMLInputElement
 
   constructor() {
     super()
@@ -64,8 +61,15 @@ export class AddLink extends LitElement {
     form,
     flex,
     css`
+      :host {
+        display: flex;
+        flex-direction: column;
+      }
       form {
         position: relative;
+      }
+      .add-button {
+        align-self: center;
       }
     `,
   ]
@@ -76,7 +80,7 @@ export class AddLink extends LitElement {
         variant="primary"
         @click=${this._handleAddClick}
         pill
-        class="w100"
+        class="add-button w40"
       >
         Add link
         <sl-icon name="plus" slot="suffix"></sl-icon>

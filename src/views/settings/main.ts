@@ -1,15 +1,7 @@
 import { html, css } from 'lit'
-import { customElement, query, state } from 'lit/decorators.js'
-import { ifDefined } from 'lit/directives/if-defined.js'
-import {
-  uploadUserPicture,
-  updateUserMeta,
-  generateUniqueURLHandle,
-} from '../../services/user.js'
-import notify from '../../utils/notify.js'
+import { customElement, state } from 'lit/decorators.js'
 import { sharedStyles } from '../../styles/shared-styles.js'
 import { spacing } from '../../styles/spacing.js'
-import { serialize } from '@shoelace-style/shoelace/dist/utilities/form.js'
 import { ProfileStateWrapper } from '../../helpers/profile-state-wrapper.js'
 import '../../components/avatar-component.js'
 import '../../components/tag-list.js'
@@ -17,9 +9,6 @@ import '../../components/tag-input.js'
 
 @customElement('view-settings-main')
 export class ViewSettingMain extends ProfileStateWrapper {
-  @query('form')
-  private form!: HTMLFormElement
-
   @state()
   protected loading: boolean = false
 

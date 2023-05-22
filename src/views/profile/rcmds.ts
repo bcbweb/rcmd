@@ -36,22 +36,16 @@ export class ViewProfileRcmds extends ProfileStateWrapper {
   constructor() {
     super()
     this._handleFetchRcmdsComplete = this._handleFetchRcmdsComplete.bind(this)
+    this._handleSetUserComplete = this._handleSetUserComplete.bind(this)
   }
 
   connectedCallback() {
     super.connectedCallback()
-    if (this.rcmds === null) {
-      this.loading = true
-      const fetchRcmdsEvent = new Event('fetch-rcmds', {
-        bubbles: true,
-        composed: true,
-      })
-      this.dispatchEvent(fetchRcmdsEvent)
-    }
     this.addEventListener(
       'fetch-rcmds-complete',
       this._handleFetchRcmdsComplete
     )
+    document.addEventListener('set-user-complete', this._handleSetUserComplete)
   }
 
   disconnectedCallback() {
@@ -59,6 +53,14 @@ export class ViewProfileRcmds extends ProfileStateWrapper {
     this.removeEventListener(
       'fetch-rcmds-complete',
       this._handleFetchRcmdsComplete
+    )
+    this.removeEventListener('set-user-complete', this._handleSetUserComplete)
+  }
+
+  protected _handleSetUserComplete() {
+    this.loading = true
+    this.dispatchEvent(
+      new Event('fetch-rcmds', { bubbles: true, composed: true })
     )
   }
 
@@ -137,7 +139,7 @@ export class ViewProfileRcmds extends ProfileStateWrapper {
         <section ?hidden=${!this.loading}>
           <p class="loading-text">Loading RCMDs<span id="ellipsis"></span></p>
         </section>
-        <section id="rcmds" class="mt1 mb1" ?hidden=${this.loading}>
+        <section id="rcmds" class="mt2 mb2" ?hidden=${this.loading}>
           <p ?hidden=${this.rcmds && this.rcmds.length > 0}>
             No RCMDs have been added.
           </p>

@@ -3,7 +3,8 @@ import { connect } from 'pwa-helpers'
 import { PageElement } from './page-element.js'
 import notify from '../utils/notify'
 import { getLinks } from '../services/link.js'
-import { setLinks } from '../redux/profileSlice.js'
+import { getRcmds } from '../services/rcmd.js'
+import { setLinks, setRcmds } from '../redux/profileSlice.js'
 import store, { RootState } from '../redux/store.js'
 import { isLoggedIn } from '../utils/general.js'
 import { router } from '../router.js'
@@ -36,6 +37,7 @@ export class ProfileStateWrapper extends connect(store)(PageElement) {
 
   connectedCallback() {
     super.connectedCallback()
+    this.addEventListener('fetch-rcmds', this._handleFetchRcmds)
     this.addEventListener('fetch-links', this._handleFetchLinks)
     document.addEventListener('set-user-complete', this._handleSetUserComplete)
   }
@@ -67,7 +69,7 @@ export class ProfileStateWrapper extends connect(store)(PageElement) {
     this.activeRole = state.profile.activeRole
   }
 
-  private _handleSetUserComplete() {
+  protected _handleSetUserComplete() {
     if (isLoggedIn() && !this.onboardingComplete) {
       notify('Please complete your profile to continue.', 'info')
       router.navigate('/onboarding')
@@ -86,5 +88,19 @@ export class ProfileStateWrapper extends connect(store)(PageElement) {
       composed: true,
     })
     this.dispatchEvent(fetchLinksEvent)
+  }
+
+  private async _handleFetchRcmds() {
+    if (!this.email) {
+      notify('Error fetching RCMDs', 'warning', 'exclamation-triangle')
+      return
+    }
+    const rcmds = await getRcmds(this.email)
+    store.dispatch(setRcmds(rcmds.data.Items))
+    const fetchRcmdsEvent = new Event('fetch-rcmds-complete', {
+      bubbles: true,
+      composed: true,
+    })
+    this.dispatchEvent(fetchRcmdsEvent)
   }
 }
